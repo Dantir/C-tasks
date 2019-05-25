@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main (int argc, char *argv[])
+{
+char buffer[128];
+strcpy(buffer,argv[1]);
+strcat(buffer,".red");
+ FILE *input=fopen(argv[1],"r");
+ FILE *output = fopen(buffer,"w");
+ char c;
+ int count = 1;
+
+        if (argc !=2)
+        {
+         printf("Please write: ./program.exe  input \n");
+         return 1;
+        }
+
+        if ((input = fopen(argv[1], "r")) == NULL)
+        {
+         printf("Couldn't open the file.\n");
+         return 1;
+        }
+
+printf("\nYour result is:\n");
+        while (!feof (input))
+        {
+         c = fgetc(input);
+                if (count % 3 == 0 )
+                {
+                 fputc(c,output);
+                 fputc(c,stdout);
+                }
+         count++;
+}
+printf("\n");
+fclose(input);
+fclose(output);
+return 0;
+}
