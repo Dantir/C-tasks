@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+int main(int argc, char* argv[])
+{
+
+mkdir("results",0775);
+chdir("results");
+FILE *Names = fopen("etc_dir.out","w");
+FILE *Permis = fopen("sysconfig.out","w");
+DIR *etc = opendir("/etc/");
+DIR *ssh = opendir("/etc/ssh/");
+struct dirent *entries;
+struct dirent *entries2;
+struct stat file;
+while((entries=readdir(etc))!=NULL)
+{
+if(entries->d_type==DT_DIR)
+{
+printf(entries->d_name);
+fputs(entries->d_name,Names);
+fputs("\n",Names);
+printf("\n");
+}
+}
+chdir("/etc/ssh/");
+
+while((entries2=readdir(ssh))!=NULL)
+ {
+ if(entries2 -> d_type == DT_REG)
+  {
+  lstat(entries2->d_name,&file);
+  if((file.st_mode &S_IRWXO)==0)
+    {
+    printf(entries2->d_name);
+    printf("\n");
+    fputs(entries2->d_name,Permis);
+    fputs("\n",Permis);
+    }
+  }
+ }
+ return 0;
+}
